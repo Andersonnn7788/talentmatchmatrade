@@ -110,3 +110,6 @@ Start exploring the features and building amazing AI-powered career tools!
 
 **Need more help?** Check `SETUP_GUIDE.md` for detailed instructions.
 
+
+
+

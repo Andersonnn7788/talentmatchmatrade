@@ -423,3 +423,6 @@ CREATE TRIGGER update_experience_updated_at BEFORE UPDATE ON experience
 CREATE TRIGGER update_events_updated_at BEFORE UPDATE ON events
   FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
 
+
+
+

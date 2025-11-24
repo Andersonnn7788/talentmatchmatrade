@@ -71,3 +71,6 @@ Upload a PDF → Should work! ✅
 
 **That's it!** Resume parsing should now work with Gemini 2.0 Flash 🚀
 
+
+
+

@@ -210,3 +210,6 @@ function InfoItem({ icon, label, value }: { icon: string; label: string; value: 
   )
 }
 
+
+
+

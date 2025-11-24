@@ -1,5 +1,9 @@
 import { createClient } from '@/lib/supabase/server'
 import type { PanelReview } from '@/app/types/database.types'
+import AgentReview from './AgentReview'
+
+export const dynamic = 'force-dynamic'
+export const revalidate = 0
 
 export default async function AIPanelPage() {
   const supabase = await createClient()
@@ -9,14 +13,12 @@ export default async function AIPanelPage() {
 
   if (!user) return null
 
-  // Fetch candidate profile
   const { data: profile } = await supabase
     .from('candidate_profiles')
     .select('id')
     .eq('user_id', user.id)
     .single()
 
-  // Fetch panel reviews
   const { data: reviews } = await supabase
     .from('panel_reviews')
     .select('*')
@@ -41,7 +43,7 @@ export default async function AIPanelPage() {
             <div className="text-gray-400 text-5xl mb-4">🤖</div>
             <h3 className="text-lg font-medium text-gray-900 mb-2">No panel reviews yet</h3>
             <p className="text-gray-600">
-              Complete your profile and apply for jobs to receive AI panel evaluations
+              Complete your preliminary interview to receive AI panel evaluations
             </p>
           </div>
         )}
@@ -75,18 +77,19 @@ function PanelReviewCard({ review }: { review: PanelReview }) {
         <div className="text-right">
           <div className="text-4xl font-bold text-blue-600 mb-2">{review.overall_score}/100</div>
           <span
-            className={`inline-block px-4 py-1 rounded-full text-sm font-medium border ${getVerdictColor(review.overall_verdict)}`}
+            className={`inline-block px-4 py-1 rounded-full text-sm font-medium border ${getVerdictColor(
+              review.overall_verdict
+            )}`}
           >
             {review.overall_verdict}
           </span>
         </div>
       </div>
 
-      {/* Agent Reviews */}
       <div className="space-y-4">
         <AgentReview
           name="HR Specialist"
-          icon="👔"
+          icon="🤝"
           score={review.hr_score}
           verdict={review.hr_verdict}
           justification={review.hr_justification}
@@ -95,7 +98,7 @@ function PanelReviewCard({ review }: { review: PanelReview }) {
         />
         <AgentReview
           name="Tech Lead"
-          icon="💻"
+          icon="🛠️"
           score={review.tech_score}
           verdict={review.tech_verdict}
           justification={review.tech_justification}
@@ -115,92 +118,4 @@ function PanelReviewCard({ review }: { review: PanelReview }) {
     </div>
   )
 }
-
-function AgentReview({
-  name,
-  icon,
-  score,
-  verdict,
-  justification,
-  pros,
-  cons,
-}: {
-  name: string
-  icon: string
-  score: number
-  verdict: string
-  justification?: string
-  pros?: string[]
-  cons?: string[]
-}) {
-  const [isExpanded, setIsExpanded] = React.useState(false)
-
-  return (
-    <div className="border border-gray-200 rounded-lg overflow-hidden">
-      <button
-        onClick={() => setIsExpanded(!isExpanded)}
-        className="w-full p-4 flex items-center justify-between hover:bg-gray-50 transition"
-      >
-        <div className="flex items-center gap-3">
-          <span className="text-2xl">{icon}</span>
-          <div className="text-left">
-            <h4 className="font-semibold text-gray-900">{name}</h4>
-            <p className="text-sm text-gray-600">{verdict}</p>
-          </div>
-        </div>
-        <div className="flex items-center gap-4">
-          <span className="text-2xl font-bold text-blue-600">{score}/100</span>
-          <svg
-            className={`w-5 h-5 text-gray-400 transition-transform ${isExpanded ? 'rotate-180' : ''}`}
-            fill="none"
-            stroke="currentColor"
-            viewBox="0 0 24 24"
-          >
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
-          </svg>
-        </div>
-      </button>
-
-      {isExpanded && (
-        <div className="p-4 bg-gray-50 border-t border-gray-200 space-y-4">
-          {justification && (
-            <div>
-              <h5 className="font-medium text-gray-900 mb-2">Justification</h5>
-              <p className="text-gray-700 text-sm">{justification}</p>
-            </div>
-          )}
-
-          {pros && pros.length > 0 && (
-            <div>
-              <h5 className="font-medium text-green-900 mb-2">Strengths</h5>
-              <ul className="list-disc list-inside space-y-1">
-                {pros.map((pro, idx) => (
-                  <li key={idx} className="text-green-800 text-sm">
-                    {pro}
-                  </li>
-                ))}
-              </ul>
-            </div>
-          )}
-
-          {cons && cons.length > 0 && (
-            <div>
-              <h5 className="font-medium text-orange-900 mb-2">Areas for Improvement</h5>
-              <ul className="list-disc list-inside space-y-1">
-                {cons.map((con, idx) => (
-                  <li key={idx} className="text-orange-800 text-sm">
-                    {con}
-                  </li>
-                ))}
-              </ul>
-            </div>
-          )}
-        </div>
-      )}
-    </div>
-  )
-}
-
-// Add React import for useState
-import React from 'react'
 

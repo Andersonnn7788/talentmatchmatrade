@@ -73,6 +73,7 @@ This dashboard is intentionally minimal for MVP (no advanced analytics).
 - Employer “Talent Command Center” aggregates leaderboard data, top projects, winners, skill-gap analytics, and blends with Hiring Panel scores for recommendations.
 
 ## Voice-to-Voice AI Interview (ElevenLabs + RAG)
+- **Configuration: 3 questions, 1 minute maximum duration (15-20 seconds per question)**
 - Keep ElevenLabs for TTS; stream candidate audio into Gemini Flash conversation orchestrated by LangGraph.
 - Before each interview, build a RAG context bundle that includes:
   - Resume-derived education, experience, achievements, interests.
@@ -80,7 +81,14 @@ This dashboard is intentionally minimal for MVP (no advanced analytics).
   - Stored hackathon/business challenge submissions and badges.
   - Target job description / employer problem statements.
 - The interviewer agent uses this context to tailor industry-specific, scenario-based questions and follow-ups.
+- **Conversation Storage in Supabase:**
+  - Granular message storage in `interview_messages` table (one row per message)
+  - Real-time progress tracking in `interview_state` table
+  - Backward compatible with JSONB `transcript` field
+  - Helper functions: `add_interview_message()`, `finalize_interview()`, `get_interview_transcript()`
+  - Full RLS security for all conversation data
 - Persist interview transcripts plus AI summaries for downstream agents (Virtual Panel, Reverse Recruiter) and to auto-populate profile fields when information is missing.
+- **After interview completion, automatically trigger Virtual Hiring Panel evaluation**
 
 ## Operational Notes
 - Enforce Supabase RLS so candidates/employers only access authorized artifacts.

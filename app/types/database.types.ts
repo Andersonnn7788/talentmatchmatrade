@@ -209,6 +209,26 @@ export interface AIInterview {
   created_at: string
 }
 
+export interface InterviewMessage {
+  id: string
+  interview_id: string
+  speaker: string
+  content: string
+  message_order: number
+  timestamp: string
+  created_at: string
+}
+
+export interface InterviewState {
+  interview_id: string
+  current_question_index: number
+  total_questions: number
+  is_active: boolean
+  started_at: string
+  last_activity_at: string
+  updated_at: string
+}
+
 export interface JobPosting {
   id: string
   company_name: string

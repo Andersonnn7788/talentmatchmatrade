@@ -530,3 +530,6 @@ To make this production-ready:
 
 This is a complete, production-ready foundation for the TalentMatch platform candidate side! 🚀
 
+
+
+

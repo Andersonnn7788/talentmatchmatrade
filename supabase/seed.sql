@@ -534,3 +534,6 @@ INSERT INTO ai_interviews (
 -- 3. Create corresponding .env.local file with your Supabase credentials
 -- 4. The mock data uses placeholder UUIDs - replace with actual IDs from your database
 
+
+
+

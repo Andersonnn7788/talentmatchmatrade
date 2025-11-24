@@ -2,6 +2,9 @@ import { createClient } from '@/lib/supabase/server'
 import Link from 'next/link'
 import type { CandidateProfile, DigitalBadge, AgentMatch, PanelReview } from '@/app/types/database.types'
 
+export const dynamic = 'force-dynamic'
+export const revalidate = 0
+
 export default async function DashboardPage() {
   const supabase = await createClient()
   const {
@@ -302,4 +305,7 @@ function calculateProfileCompleteness(profile: CandidateProfile | null): number 
   const filledFields = fields.filter(Boolean).length
   return Math.round((filledFields / fields.length) * 100)
 }
+
+
+
 

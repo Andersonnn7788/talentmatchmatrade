@@ -131,3 +131,6 @@ function BadgeCard({ badge }: { badge: DigitalBadge }) {
   )
 }
 
+
+
+

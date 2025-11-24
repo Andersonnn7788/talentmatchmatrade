@@ -193,3 +193,6 @@ function EventCard({ event, isRegistered }: { event: Event; isRegistered: boolea
   )
 }
 
+
+
+

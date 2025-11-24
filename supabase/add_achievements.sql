@@ -27,3 +27,6 @@ CREATE INDEX idx_achievements_candidate_id ON achievements(candidate_id);
 CREATE TRIGGER update_achievements_updated_at BEFORE UPDATE ON achievements
   FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
 
+
+
+

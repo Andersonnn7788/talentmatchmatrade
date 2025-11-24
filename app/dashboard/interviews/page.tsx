@@ -29,9 +29,9 @@ export default async function InterviewsPage() {
     <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
       <div className="mb-8 flex justify-between items-center">
         <div>
-          <h1 className="text-3xl font-bold text-gray-900">AI Interview Practice</h1>
+          <h1 className="text-3xl font-bold text-gray-900">AI Interview</h1>
           <p className="text-gray-600 mt-2">
-            Practice with voice-to-voice AI interviews tailored to your profile
+            Start voice-to-voice AI interviews tailored to your profile
           </p>
         </div>
         <Link
@@ -50,9 +50,9 @@ export default async function InterviewsPage() {
         ) : (
           <div className="text-center py-12 bg-white rounded-xl shadow-sm">
             <div className="text-gray-400 text-5xl mb-4">🎤</div>
-            <h3 className="text-lg font-medium text-gray-900 mb-2">No interview practice yet</h3>
+            <h3 className="text-lg font-medium text-gray-900 mb-2">No interview yet</h3>
             <p className="text-gray-600 mb-6">
-              Start your first AI interview to practice and improve your skills
+              Start your first AI interview as the preliminary interview for your job application
             </p>
             <Link
               href="/dashboard/interviews/new"
@@ -162,4 +162,7 @@ function InterviewCard({ interview }: { interview: AIInterview }) {
     </div>
   )
 }
+
+
+
 

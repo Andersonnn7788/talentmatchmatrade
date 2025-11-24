@@ -1,5 +1,6 @@
 import { createClient } from '@/lib/supabase/server'
 import type { AgentMatch, JobPosting } from '@/app/types/database.types'
+import AgentMatchResults from './AgentMatchResults'
 
 type JobMatchWithDetails = AgentMatch & {
   job_postings?: JobPosting | null
@@ -62,27 +63,14 @@ export default async function JobMatchesPage() {
         <StatBox label="Applied" value={appliedMatches.length} color="green" />
       </div>
 
-      {/* Matches */}
+      {/* AI Agent Recommendations + Matches */}
       <div className="space-y-6">
+        <AgentMatchResults />
         {matches.length > 0 ? (
           <>
-            {newMatches.length > 0 && (
-              <Section title="New Matches" matches={newMatches} candidateId={profile?.id || ''} />
-            )}
-            {viewedMatches.length > 0 && (
-              <Section
-                title="Viewed Matches"
-                matches={viewedMatches}
-                candidateId={profile?.id || ''}
-              />
-            )}
-            {appliedMatches.length > 0 && (
-              <Section
-                title="Applied"
-                matches={appliedMatches}
-                candidateId={profile?.id || ''}
-              />
-            )}
+            {newMatches.length > 0 && <Section title="New Matches" matches={newMatches} />}
+            {viewedMatches.length > 0 && <Section title="Viewed Matches" matches={viewedMatches} />}
+            {appliedMatches.length > 0 && <Section title="Applied" matches={appliedMatches} />}
           </>
         ) : jobPostings && jobPostings.length > 0 ? (
           <JobListingSection jobs={jobPostings} />
@@ -124,21 +112,13 @@ function StatBox({
   )
 }
 
-function Section({
-  title,
-  matches,
-  candidateId,
-}: {
-  title: string
-  matches: JobMatchWithDetails[]
-  candidateId: string
-}) {
+function Section({ title, matches }: { title: string; matches: JobMatchWithDetails[] }) {
   return (
     <div>
       <h2 className="text-xl font-semibold text-gray-900 mb-4">{title}</h2>
       <div className="space-y-4">
         {matches.map((match) => (
-          <JobMatchCard key={match.id} match={match} candidateId={candidateId} />
+          <JobMatchCard key={match.id} match={match} />
         ))}
       </div>
     </div>
@@ -165,13 +145,7 @@ function JobListingSection({ jobs }: { jobs: JobPosting[] }) {
   )
 }
 
-function JobMatchCard({
-  match,
-  candidateId,
-}: {
-  match: JobMatchWithDetails
-  candidateId: string
-}) {
+function JobMatchCard({ match }: { match: JobMatchWithDetails }) {
   const getMatchColor = (score: number) => {
     if (score >= 90) return 'bg-green-100 text-green-800 border-green-200'
     if (score >= 75) return 'bg-blue-100 text-blue-800 border-blue-200'
