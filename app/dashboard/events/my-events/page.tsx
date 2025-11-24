@@ -2,7 +2,7 @@ import { createClient } from '@/lib/supabase/server'
 import Link from 'next/link'
 import type { Event, EventRegistration } from '@/app/types/database.types'
 
-export default async function EventsPage() {
+export default async function MyEventsPage() {
   const supabase = await createClient()
   const {
     data: { user },
@@ -17,22 +17,16 @@ export default async function EventsPage() {
     .eq('user_id', user.id)
     .single()
 
-  // Fetch all open events
-  const { data: events } = await supabase
-    .from('events')
-    .select('*')
-    .in('status', ['open', 'in_progress'])
-    .order('start_date', { ascending: true })
-    .returns<Event[]>()
-
-  // Fetch user's registrations
+  // Fetch user's registrations with event details
   const { data: registrations } = await supabase
     .from('event_registrations')
-    .select('event_id, registration_status')
+    .select(`
+      event_id,
+      registration_status,
+      events:event_id (*)
+    `)
     .eq('candidate_id', profile?.id || '')
-    .returns<EventRegistration[]>()
-
-  const registeredEventIds = new Set(registrations?.map((r) => r.event_id) || [])
+    .returns<(EventRegistration & { events: Event })[]>()
 
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
@@ -45,40 +39,47 @@ export default async function EventsPage() {
 
       {/* Tabs */}
       <div className="flex space-x-4 border-b border-gray-200 mb-8">
-        <button className="px-4 py-2 border-b-2 border-blue-600 text-blue-600 font-medium">
-          Available Events
-        </button>
         <Link
-          href="/dashboard/events/my-events"
+          href="/dashboard/events"
           className="px-4 py-2 text-gray-600 hover:text-gray-900"
         >
-          My Registrations
+          Available Events
         </Link>
+        <button className="px-4 py-2 border-b-2 border-blue-600 text-blue-600 font-medium">
+          My Registrations
+        </button>
       </div>
 
       {/* Events Grid */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        {events?.map((event) => (
+        {registrations?.map((registration) => (
           <EventCard
-            key={event.id}
-            event={event}
-            isRegistered={registeredEventIds.has(event.id)}
+            key={registration.event_id}
+            event={registration.events}
+            isRegistered={true}
+            status={registration.registration_status}
           />
         ))}
       </div>
 
-      {!events || events.length === 0 && (
+      {!registrations || registrations.length === 0 && (
         <div className="text-center py-12">
-          <div className="text-gray-400 text-5xl mb-4">🎯</div>
-          <h3 className="text-lg font-medium text-gray-900 mb-2">No events available</h3>
-          <p className="text-gray-600">Check back soon for upcoming events!</p>
+          <div className="text-gray-400 text-5xl mb-4">📝</div>
+          <h3 className="text-lg font-medium text-gray-900 mb-2">No registered events</h3>
+          <p className="text-gray-600 mb-4">You haven&apos;t registered for any events yet.</p>
+          <Link 
+            href="/dashboard/events"
+            className="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-blue-600 hover:bg-blue-700"
+          >
+            Browse Events
+          </Link>
         </div>
       )}
     </div>
   )
 }
 
-function EventCard({ event, isRegistered }: { event: Event; isRegistered: boolean }) {
+function EventCard({ event, isRegistered, status }: { event: Event; isRegistered: boolean; status?: string }) {
   const getEventTypeColor = (type: string) => {
     switch (type) {
       case 'hackathon':
@@ -122,8 +123,8 @@ function EventCard({ event, isRegistered }: { event: Event; isRegistered: boolea
             {event.event_type.replace('_', ' ').toUpperCase()}
           </span>
           {isRegistered && (
-            <span className="px-3 py-1 rounded-full text-xs font-medium bg-green-100 text-green-800">
-              Registered
+            <span className="px-3 py-1 rounded-full text-xs font-medium bg-green-100 text-green-800 capitalize">
+              {status || 'Registered'}
             </span>
           )}
         </div>
@@ -192,3 +193,4 @@ function EventCard({ event, isRegistered }: { event: Event; isRegistered: boolea
     </div>
   )
 }
+

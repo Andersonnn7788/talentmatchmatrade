@@ -28,6 +28,7 @@ export default function DashboardNav() {
     { href: '/dashboard/profile', label: 'Profile', icon: '👤' },
     { href: '/dashboard/events', label: 'Events', icon: '🎯' },
     { href: '/dashboard/submissions', label: 'My Submissions', icon: '📝' },
+    { href: '/dashboard/leaderboard', label: 'Leaderboard', icon: '🏅' },
     { href: '/dashboard/badges', label: 'Badges', icon: '🏆' },
   ]
 

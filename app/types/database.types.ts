@@ -22,6 +22,7 @@ export interface CandidateProfile {
   availability_date?: string
   visible_to_employers: boolean
   profile_public: boolean
+  xp_points: number
   created_at: string
   updated_at: string
 }
