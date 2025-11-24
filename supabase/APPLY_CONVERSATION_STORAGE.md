@@ -232,3 +232,4 @@ Your interview conversations are now stored in Supabase with full RLS security, 
 For more details, see `CONVERSATION_STORAGE_SETUP.md`.
 
 
+

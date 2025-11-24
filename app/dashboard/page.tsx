@@ -309,3 +309,4 @@ function calculateProfileCompleteness(profile: CandidateProfile | null): number 
 
 
 
+

@@ -30,3 +30,4 @@ CREATE TRIGGER update_achievements_updated_at BEFORE UPDATE ON achievements
 
 
 
+

@@ -426,3 +426,4 @@ CREATE TRIGGER update_events_updated_at BEFORE UPDATE ON events
 
 
 
+
